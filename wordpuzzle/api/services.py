@@ -30,7 +30,7 @@ class WordPuzzleSolverService:
                 if neighbor not in visited:
                     previous[neighbor] = node
                     queue.appendleft(neighbor)
-        # rebuild from neighbor list
+        # rebuild from previous pointer
         if end_word not in previous:
             return [] # what should I be returning here? No path found, some HTTP code situation? 
         node = end_word
@@ -45,6 +45,7 @@ class WordPuzzleSolverService:
         if len(start_word) != len(end_word):
             return 
         self.graph = {} # clear graph in case of previous, consider turning this into a non instance parameter
+        # possible efficiency improvement - only need to use one node, since if they connect then anything reachable from start will be reachable from end
         nodes = [start_word, end_word]
         discovered = set()
         while nodes: 
