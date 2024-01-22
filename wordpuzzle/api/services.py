@@ -1,4 +1,4 @@
-# wordpuzzle/services.py
+# api/services.py
 import asyncio
 
 class WordPuzzleSolverService:

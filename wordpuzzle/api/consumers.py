@@ -1,4 +1,4 @@
-# wordpuzzle/consumers.py 
+#api/consumers.py 
 import asyncio
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -15,7 +15,7 @@ class WordPuzzleConsumer(AsyncWebsocketConsumer):
         start_word = data['startWord']
         end_word = data['endWord']
 
-        # Perform the asynchronous operation using the service
+        # Perform the asynchronous operation using the puzzle solver service
         result = await WordPuzzleSolverService.solve_puzzle(start_word, end_word)
 
         # Send the result back to the WebSocket client
