@@ -8,6 +8,10 @@ from .services import WordPuzzleSolverService
 class WordPuzzleApi(View):
     """Implement the API here"""
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.word_service = WordPuzzleSolverService()
+
     async def get(self, request, *args, **kwargs):
         words = WordLoader.get_word_set()
 
@@ -21,7 +25,7 @@ class WordPuzzleApi(View):
             end_word = serializer.validated_data['endWord']
 
             # Run puzzle solver
-            result = async WordPuzzleSolverService.solve_puzzle(start_word, end_word)
+            result = async self.word_service.solve_puzzle(start_word, end_word)
 
             return Response({'result': result}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

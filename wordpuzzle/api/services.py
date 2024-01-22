@@ -1,6 +1,7 @@
 # api/services.py
 import asyncio
 import WordLoader from word_loader
+from collections import deque 
 
 class WordPuzzleSolverService:
     
@@ -10,16 +11,40 @@ class WordPuzzleSolverService:
         self.graph = {}
     
     async def solve_puzzle(start_word, end_word): 
-        #asynchronous logic for solving word puzzle
         if len(start_word) != len(end_word):
             raise ValueError("provided start and end word are of different lengths, impossible puzzle")
-        result = []
-        return result
+        self.build_graph(start_word, end_word)
+        
+        # run shortest path algorithm
+        queue = deque()
+        visited = set()
+        queue.appendleft(start_word)
+        previous = {start_word: None}
+        while queue: 
+            node = queue.pop()
+            if node == end_word:
+                break 
+            visited.add(node)
+            neighbors = self.graph[node]
+            for neighbor in neighbors: 
+                if neighbor not in visited:
+                    previous[neighbor] = node
+                    queue.appendleft(neighbor)
+        # rebuild from neighbor list
+        if end_word not in previous:
+            return [] # what should I be returning here? No path found, some HTTP code situation? 
+        node = end_word
+        path = [end_word]
+        while node!=start_word: 
+            path.append(previous[node])
+            node = previous[node]
+        return path[::-1]
     
     def build_graph(self, start_word, end_word):
         # update self.graph with the adjacency list (node -> edges) of traversable words from start and end word 
         if len(start_word) != len(end_word):
             return 
+        self.graph = {} # clear graph in case of previous, consider turning this into a non instance parameter
         nodes = [start_word, end_word]
         discovered = set()
         while nodes: 
