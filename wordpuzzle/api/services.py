@@ -1,16 +1,17 @@
 # api/services.py
 import asyncio
-import WordLoader from word_loader
+import string
+from .word_loader import WordLoader
 from collections import deque 
 
 class WordPuzzleSolverService:
     
     def __init__(self): 
-        self.word_loader = WorldLoader()
+        self.word_loader = WordLoader()
         self.word_loader.load_words()
         self.graph = {}
     
-    async def solve_puzzle(start_word, end_word): 
+    def solve_puzzle(self, start_word, end_word): 
         if len(start_word) != len(end_word):
             raise ValueError("provided start and end word are of different lengths, impossible puzzle")
         self.build_graph(start_word, end_word)
@@ -56,7 +57,8 @@ class WordPuzzleSolverService:
             neighbors = self.get_neighbors(node)
             for neighbor in neighbors:
                 self.graph[node].add(neighbor)
-                 if neighbor not in discovered: nodes.append(neighbor)    
+                if neighbor not in discovered: 
+                    nodes.append(neighbor)    
     
     def get_neighbors(self, word): 
         alphabet = list(string.ascii_lowercase)

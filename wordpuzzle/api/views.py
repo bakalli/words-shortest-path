@@ -1,8 +1,13 @@
 from django.http import HttpResponse
 from django.views import View
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 
 from .word_loader import WordLoader
 from .services import WordPuzzleSolverService
+from .serializers import WordPuzzleSerializer
 
 
 class WordPuzzleApi(View):
@@ -11,22 +16,16 @@ class WordPuzzleApi(View):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.word_service = WordPuzzleSolverService()
-
+    
     async def get(self, request, *args, **kwargs):
-        words = WordLoader.get_word_set()
+        # Extract parameters from the query string
+        start_word = request.GET.get('startWord', '')
+        end_word = request.GET.get('endWord', '')
 
-        return HttpResponse("Implementation needed")
-
-
-    async def post(self, request, *args, **kwargs):
-        serializer = WordPuzzleSerializer(data=request.data)
+        serializer = WordPuzzleSerializer(data={'startWord': start_word, 'endWord': end_word})
         if serializer.is_valid():
-            start_word = serializer.validated_data['startWord']
-            end_word = serializer.validated_data['endWord']
-
-            # Run puzzle solver
-            result = async self.word_service.solve_puzzle(start_word, end_word)
-
-            return Response({'result': result}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            result = self.word_service.solve_puzzle(start_word, end_word)
+            # endpoint should be returning the result in JSON format, might need to use json.dump 
+            return JsonResponse({'result': result}, status=200)
+        return JsonResponse(serializer.errors, status=400)
         
