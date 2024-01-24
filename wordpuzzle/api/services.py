@@ -6,9 +6,14 @@ from collections import deque
 
 class WordPuzzleSolverService:
     
-    def __init__(self): 
+    def __init__(self, test_set = None): 
         self.word_loader = WordLoader()
-        self.word_loader.load_words()
+        if test_set == "small":
+            self.word_loader.load_words_small()
+        elif test_set == "medium":
+            self.word_loader.load_words_medium()
+        else:
+            self.word_loader.load_words()
         self.graph = {}
     
     """
