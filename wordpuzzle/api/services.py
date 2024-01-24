@@ -28,6 +28,9 @@ class WordPuzzleSolverService:
         if start_word not in word_set or end_word not in word_set:
             raise ValueError("You have provided an invalid word(s).")
         self.build_graph(start_word, end_word)
+
+        if end_word not in self.graph:
+            raise ValueError("There is no path from startWord to endWord.")
         
         # run shortest path algorithm
         queue = deque()
@@ -44,9 +47,7 @@ class WordPuzzleSolverService:
                 if neighbor not in visited:
                     previous[neighbor] = node
                     queue.appendleft(neighbor)
-        # rebuild from previous pointer
-        if end_word not in previous:
-            return [] # what should I be returning here? No path found, some HTTP code situation? 
+        
         node = end_word
         path = [end_word]
         while node!=start_word: 
@@ -55,15 +56,15 @@ class WordPuzzleSolverService:
         return path[::-1]
     
     """
-    Update self.graph with the adjacency list (node -> edges) of traversable words from start and end word. 
+    Update self.graph with the adjacency list (node -> edges) of traversable words from starting word.
 
     @param startWord: word from which we are starting our word search.
-    @param endWord: word which we are targetting in our search. 
     """
-    def build_graph(self, start_word, end_word):
+    def build_graph(self, start_word):
         self.graph = {} # clear graph in case of previous, consider turning this into a non instance parameter
         # possible efficiency improvement - only need to use one node, since if they connect then anything reachable from start will be reachable from end
-        nodes = [start_word, end_word]
+        nodes = deque()
+        nodes.appendleft(start_word)
         discovered = set()
         while nodes: 
             node = nodes.pop()
@@ -74,7 +75,7 @@ class WordPuzzleSolverService:
             for neighbor in neighbors:
                 self.graph[node].add(neighbor)
                 if neighbor not in discovered: 
-                    nodes.append(neighbor)    
+                    nodes.appendleft(neighbor)    
     
     """
     Get possible neighbors for the given word using the word_set of valid words.
