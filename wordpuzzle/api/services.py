@@ -54,10 +54,13 @@ class WordPuzzleSolverService:
             node = previous[node]
         return path[::-1]
     
+    """
+    Update self.graph with the adjacency list (node -> edges) of traversable words from start and end word. 
+
+    @param startWord: word from which we are starting our word search.
+    @param endWord: word which we are targetting in our search. 
+    """
     def build_graph(self, start_word, end_word):
-        # update self.graph with the adjacency list (node -> edges) of traversable words from start and end word 
-        if len(start_word) != len(end_word):
-            return 
         self.graph = {} # clear graph in case of previous, consider turning this into a non instance parameter
         # possible efficiency improvement - only need to use one node, since if they connect then anything reachable from start will be reachable from end
         nodes = [start_word, end_word]
@@ -73,6 +76,12 @@ class WordPuzzleSolverService:
                 if neighbor not in discovered: 
                     nodes.append(neighbor)    
     
+    """
+    Get possible neighbors for the given word using the word_set of valid words.
+    A neighbor is defined as a word of equal length, which differs by exactly one letter.
+
+    @param word: word for which we are finding neighbors. 
+    """
     def get_neighbors(self, word): 
         alphabet = list(string.ascii_lowercase)
         word_set = self.word_loader.get_word_set()
