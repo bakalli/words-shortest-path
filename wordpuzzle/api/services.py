@@ -27,15 +27,14 @@ class WordPuzzleSolverService:
         word_set = self.word_loader.get_word_set()
         if start_word not in word_set or end_word not in word_set:
             raise ValueError("You have provided an invalid word(s).")
+        
         self.build_graph(start_word)
-
         if end_word not in self.graph:
             raise ValueError("There is no path from startWord to endWord.")
         
         # run shortest path algorithm
-        queue = deque()
+        queue = [start_word]
         visited = set()
-        queue.appendleft(start_word)
         previous = {start_word: None}
         while queue:
             next_queue = []
