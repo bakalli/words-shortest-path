@@ -27,7 +27,7 @@ class WordPuzzleSolverService:
         word_set = self.word_loader.get_word_set()
         if start_word not in word_set or end_word not in word_set:
             raise ValueError("You have provided an invalid word(s).")
-        self.build_graph(start_word, end_word)
+        self.build_graph(start_word)
 
         if end_word not in self.graph:
             raise ValueError("There is no path from startWord to endWord.")
@@ -37,16 +37,19 @@ class WordPuzzleSolverService:
         visited = set()
         queue.appendleft(start_word)
         previous = {start_word: None}
-        while queue: 
-            node = queue.pop()
-            if node == end_word:
-                break 
-            visited.add(node)
-            neighbors = self.graph[node]
-            for neighbor in neighbors: 
-                if neighbor not in visited:
-                    previous[neighbor] = node
-                    queue.appendleft(neighbor)
+        while queue:
+            next_queue = []
+            for node in queue: 
+                if node == end_word:
+                    next_queue = []
+                    break 
+                neighbors = self.graph[node]
+                for neighbor in neighbors:
+                    if neighbor not in visited:
+                        previous[neighbor] = node
+                        visited.add(neighbor)
+                        next_queue.append(neighbor)
+            queue = next_queue
         
         node = end_word
         path = [end_word]
@@ -68,14 +71,17 @@ class WordPuzzleSolverService:
         discovered = set()
         while nodes: 
             node = nodes.pop()
+            if node in discovered:
+                continue
+            discovered.add(node)
             if node not in self.graph:
                 self.graph[node] = set()
-            discovered.add(node)
             neighbors = self.get_neighbors(node)
             for neighbor in neighbors:
                 self.graph[node].add(neighbor)
                 if neighbor not in discovered: 
                     nodes.appendleft(neighbor)    
+        return
     
     """
     Get possible neighbors for the given word using the word_set of valid words.
