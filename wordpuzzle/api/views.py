@@ -11,7 +11,17 @@ from .serializers import WordPuzzleSerializer
 
 
 class WordPuzzleApi(View):
-    """Implement the API here"""
+    """ 
+    This API enables users to interact with the WordPuzzleSolverService
+    through the use of GET requests. 
+
+    The API creates a single instance of the service, and uses it to 
+    solve all puzzles (pair of startWord and endWord) which it is given.
+
+    For GET:
+    @param startWord: word from which we are starting our word search.
+    @param endWord: word which we are targetting in our search. 
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

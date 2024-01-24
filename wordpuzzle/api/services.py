@@ -11,6 +11,11 @@ class WordPuzzleSolverService:
         self.word_loader.load_words()
         self.graph = {}
     
+    """
+    @param startWord: word from which we are starting our word search.
+    @param endWord: word which we are targetting in our search. 
+    @return shortest_path: shortest possible path from startWord to endWord, if one exists. 
+    """
     def solve_puzzle(self, start_word, end_word): 
         if len(start_word) != len(end_word):
             raise ValueError("provided start and end word are of different lengths, impossible puzzle")
