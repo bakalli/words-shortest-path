@@ -34,8 +34,11 @@ class WordPuzzleApi(View):
 
         serializer = WordPuzzleSerializer(data={'startWord': start_word, 'endWord': end_word})
         if serializer.is_valid():
-            result = self.word_service.solve_puzzle(start_word, end_word)
-            # endpoint should be returning the result in JSON format, might need to use json.dump 
-            return JsonResponse({'result': result}, status=200)
+            try: 
+                result = self.word_service.solve_puzzle(start_word, end_word)
+                # endpoint should be returning the result in JSON format, might need to use json.dump 
+                return JsonResponse({'result': result}, status=200)
+            except ValueError as e:
+                JsonResponse(e.message, status=400)
         return JsonResponse(serializer.errors, status=400)
         

@@ -18,7 +18,10 @@ class WordPuzzleSolverService:
     """
     def solve_puzzle(self, start_word, end_word): 
         if len(start_word) != len(end_word):
-            raise ValueError("provided start and end word are of different lengths, impossible puzzle")
+            raise ValueError("Provided start and end words are of different lengths, unsolveable puzzle.")
+        word_set = self.word_loader.get_word_set()
+        if start_word not in word_set or end_word not in word_set:
+            raise ValueError("You have provided an invalid word(s).")
         self.build_graph(start_word, end_word)
         
         # run shortest path algorithm
