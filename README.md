@@ -7,7 +7,30 @@ cd wordpuzzle
 python manage.py runserver
 ```
 
-## What is included
-This is a bilerplate of a Django project 'wordpuzzle' that has one app called 'api'
-The 'api' app has an implementation of a WordLoader class that loads a dictionary availiable to use. 
-It also provides a dummy API endpoint api/wordpuzzle that needs to be implemented
+## Example GET request sent over the API 
+
+
+startWord: oyster
+endWord: mussel
+
+```
+http://127.0.0.1:8000/api/wordpuzzle?startWord=oyster&endWord=mussel
+```
+
+## Testing 
+
+```
+python3 manage.py test
+```
+
+Should yield: 
+
+```
+----------------------------------------------------------------------
+Ran 12 tests in 2.953s
+
+OK
+```
+
+
+
