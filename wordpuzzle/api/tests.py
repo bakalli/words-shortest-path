@@ -1,6 +1,9 @@
-from django.test import TestCase
-from services import WordPuzzleSolverService
+import django
 import unittest
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from .services import WordPuzzleSolverService
 
 """
 WordPuzzleSolverService Test Suite: 
@@ -84,6 +87,24 @@ class WordPuzzleSolverTests(unittest.TestCase):
             shortest_path = word_service.solve_puzzle("nabobrynabobs", "muzzleloading")
         except Exception as e:
             self.assertIsInstance(e, ValueError)
+
+class WordPuzzleSolverAPITestCase(TestCase):
+    
+    def test_get_shortest_path(self):
+        start_word = 'oyster'
+        end_word = 'mussel'
+        url = reverse('wordpuzzle') 
+
+        # Perform the GET request
+        response = self.client.get(url, {'startWord': start_word, 'endWord': end_word})
+
+        # Assert the response status code
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Assert the response content
+        expected_result = WordPuzzleSolverService().solve_puzzle(start_word, end_word)
+        self.assertEqual(response.json(), {'result': expected_result})
+
 
 if __name__ == '__main__':
     unittest.main()
