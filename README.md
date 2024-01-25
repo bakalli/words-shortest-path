@@ -9,11 +9,10 @@ python manage.py runserver
 
 ## Example GET request sent over the API 
 
-
+```
 startWord: oyster
 endWord: mussel
 
-```
 http://127.0.0.1:8000/api/wordpuzzle?startWord=oyster&endWord=mussel
 ```
 
