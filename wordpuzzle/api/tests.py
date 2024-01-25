@@ -1,6 +1,5 @@
 from django.test import TestCase
-from .word_loader import WordLoader
-from .services import WordPuzzleSolverService
+from services import WordPuzzleSolverService
 import unittest
 
 """
@@ -20,7 +19,7 @@ WordPuzzleSolverService Test Suite:
         fail cases: empty string provided, invalid word provided --> throws upstream in solve_puzzle
         invariant: all neighbors must be same length as original word
         coverage: 0 < word_length < max_word_length + 1
-        
+
 """
 class WordPuzzleSolverTests(unittest.TestCase): 
     def test_get_neighbors_small(self):
@@ -81,5 +80,10 @@ class WordPuzzleSolverTests(unittest.TestCase):
             self.assertIsInstance(e, ValueError)
     def test_shortest_path_unsolveable(self): 
         word_service = WordPuzzleSolverService()
-        # TODO
+        try:
+            shortest_path = word_service.solve_puzzle("nabobrynabobs", "muzzleloading")
+        except Exception as e:
+            self.assertIsInstance(e, ValueError)
 
+if __name__ == '__main__':
+    unittest.main()

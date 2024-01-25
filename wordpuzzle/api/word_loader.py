@@ -9,8 +9,6 @@ class WordLoader:
     """
 
     words = None
-    small_words = None
-    medium_words = None
 
     @classmethod
     def load_words_small(cls):
