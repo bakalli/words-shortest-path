@@ -1,4 +1,6 @@
 from django.test import TestCase
+from .word_loader import WordLoader
+from .services import WordPuzzleSolverService
 import unittest
 
 """
@@ -18,9 +20,8 @@ WordPuzzleSolverService Test Suite:
         fail cases: empty string provided, invalid word provided --> throws upstream in solve_puzzle
         invariant: all neighbors must be same length as original word
         coverage: 0 < word_length < max_word_length + 1
-
+        
 """
-
 class WordPuzzleSolverTests(unittest.TestCase): 
     def test_get_neighbors_small(self):
         word_service = WordPuzzleSolverService(test_set="small")
