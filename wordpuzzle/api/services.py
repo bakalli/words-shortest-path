@@ -63,8 +63,7 @@ class WordPuzzleSolverService:
     @param startWord: word from which we are starting our word search.
     """
     def build_graph(self, start_word):
-        self.graph = {} # clear graph in case of previous, consider turning this into a non instance parameter
-        # possible efficiency improvement - only need to use one node, since if they connect then anything reachable from start will be reachable from end
+        self.graph = {} 
         nodes = deque()
         nodes.appendleft(start_word)
         discovered = set()
