@@ -1,4 +1,3 @@
-# Rooser take-home Python tech test
 
 ## How to run
 
